@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Register{% endblock %}
+{% block content %}
+<h1>Create an account</h1>
+<form method="post" class="card">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+  <label for="name">Full name</label>
+  <input id="name" name="name" required minlength="2" maxlength="80" value="{{ form.get('name', '') }}">
+  <label for="email">Email</label>
+  <input id="email" name="email" type="email" required maxlength="120" value="{{ form.get('email', '') }}">
+  <label for="password">Password (min 8 characters)</label>
+  <input id="password" name="password" type="password" required minlength="8" autocomplete="new-password">
+  <label for="role">I am a</label>
+  <select id="role" name="role" required>
+    <option value="student" {% if form.get('role') == 'student' %}selected{% endif %}>Student</option>
+    <option value="recruiter" {% if form.get('role') == 'recruiter' %}selected{% endif %}>Recruiter</option>
+  </select>
+  <label for="company_name">Company name (recruiters only)</label>
+  <input id="company_name" name="company_name" maxlength="100" value="{{ form.get('company_name', '') }}">
+  <button type="submit">Register</button>
+  <p class="muted">Already registered? <a href="{{ url_for('auth.login') }}">Log in</a></p>
+</form>
+{% endblock %}

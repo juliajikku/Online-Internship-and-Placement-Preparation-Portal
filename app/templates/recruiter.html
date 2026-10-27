@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Recruiter dashboard{% endblock %}
+{% block content %}
+<h1>Welcome, {{ g.user['name'] }}</h1>
+<div class="card">
+  <p>Company: <strong>{{ g.user['company_name'] }}</strong></p>
+  {% if g.user['status'] == 'pending' %}
+    <p class="badge pending">Awaiting Admin approval</p>
+    <p class="muted">You cannot post listings until the placement cell approves your account.</p>
+  {% else %}
+    <p class="badge approved">Approved</p>
+    <p class="muted">Posting internship listings arrives in Sprint 2.</p>
+  {% endif %}
+</div>
+{% endblock %}
