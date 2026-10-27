@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Admin - recruiter approvals{% endblock %}
+{% block content %}
+<h1>Recruiter approvals</h1>
+
+<h2>Pending ({{ pending|length }})</h2>
+{% if pending %}
+<table>
+  <thead><tr><th>Name</th><th>Email</th><th>Company</th><th>Registered</th><th>Action</th></tr></thead>
+  <tbody>
+  {% for r in pending %}
+    <tr>
+      <td>{{ r['name'] }}</td>
+      <td>{{ r['email'] }}</td>
+      <td>{{ r['company_name'] }}</td>
+      <td>{{ r['created_at'][:10] }}</td>
+      <td>
+        <form method="post" action="{{ url_for('admin.approve', recruiter_id=r['id']) }}" class="inline">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+          <button type="submit">Approve</button>
+        </form>
+        <form method="post" action="{{ url_for('admin.reject', recruiter_id=r['id']) }}" class="inline">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+          <button type="submit" class="danger">Reject</button>
+        </form>
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p class="muted">No recruiters are waiting for approval.</p>
+{% endif %}
+
+<h2>Reviewed</h2>
+{% if decided %}
+<table>
+  <thead><tr><th>Name</th><th>Email</th><th>Company</th><th>Decision</th></tr></thead>
+  <tbody>
+  {% for r in decided %}
+    <tr>
+      <td>{{ r['name'] }}</td>
+      <td>{{ r['email'] }}</td>
+      <td>{{ r['company_name'] }}</td>
+      <td>{{ 'Approved' if r['status'] == 'active' else 'Rejected' }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p class="muted">No decisions yet.</p>
+{% endif %}
+{% endblock %}
