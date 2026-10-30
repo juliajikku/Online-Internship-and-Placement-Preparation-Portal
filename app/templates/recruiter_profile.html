@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Company profile{% endblock %}
+{% block content %}
+<h1>Company profile</h1>
+<form method="post" class="card">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+  <label for="company_name">Company name</label>
+  <input id="company_name" name="company_name" required maxlength="100" value="{{ profile.get('company_name', '') or '' }}">
+  <label for="description">About the company</label>
+  <textarea id="description" name="description" rows="4" maxlength="1000">{{ profile.get('description', '') or '' }}</textarea>
+  <label for="website">Website</label>
+  <input id="website" name="website" maxlength="200" placeholder="https://" value="{{ profile.get('website', '') or '' }}">
+  <button type="submit">Save</button>
+</form>
+{% endblock %}

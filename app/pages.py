@@ -1,6 +1,7 @@
 """Landing redirect and the role-specific dashboards."""
 from flask import Blueprint, g, redirect, render_template, url_for
 
+from .db import get_db
 from .security import login_required, role_required
 
 bp = Blueprint("pages", __name__)
@@ -34,4 +35,11 @@ def student_home():
 @bp.route("/recruiter")
 @role_required("recruiter")
 def recruiter_home():
-    return render_template("recruiter.html")
+    listings = get_db().execute(
+        "SELECT COUNT(*) FROM listings WHERE recruiter_id = ?", (g.user["id"],)
+    ).fetchone()[0]
+    applicants = get_db().execute(
+        "SELECT COUNT(*) FROM applications a JOIN listings l ON l.id = a.listing_id WHERE l.recruiter_id = ?",
+        (g.user["id"],),
+    ).fetchone()[0]
+    return render_template("recruiter.html", listings=listings, applicants=applicants)

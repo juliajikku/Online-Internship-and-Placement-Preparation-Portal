@@ -1,11 +1,11 @@
-"""Online Internship & Placement Preparation Portal - Sprint 1 application factory."""
+"""Online Internship & Placement Preparation Portal - application factory (Sprint 1 + Sprint 2)."""
 import os
 import secrets
 from datetime import timedelta
 
 from flask import Flask, abort, render_template, request, session
 
-from . import admin, auth, db, pages
+from . import admin, applications, auth, db, listings, pages, profiles
 from .security import load_current_user
 
 
@@ -21,6 +21,8 @@ def create_app(test_config=None):
         SESSION_COOKIE_SAMESITE="Lax",
         # Set COOKIE_SECURE=1 when serving over HTTPS (SE-04).
         SESSION_COOKIE_SECURE=os.environ.get("COOKIE_SECURE") == "1",
+        UPLOAD_DIR=os.path.join(app.instance_path, "resumes"),
+        MAX_CONTENT_LENGTH=6 * 1024 * 1024,  # hard cap; the 5 MB resume rule is checked in profiles.py
         MAX_FAILED_ATTEMPTS=5,
         LOCKOUT_MINUTES=15,
     )
@@ -34,7 +36,8 @@ def create_app(test_config=None):
 
     app.register_blueprint(auth.bp)
     app.register_blueprint(admin.bp)
-    app.register_blueprint(pages.bp)
+    for module in (profiles, listings, applications, pages):
+        app.register_blueprint(module.bp)
 
     @app.before_request
     def _before():
@@ -61,8 +64,9 @@ def create_app(test_config=None):
     @app.errorhandler(400)
     @app.errorhandler(403)
     @app.errorhandler(404)
+    @app.errorhandler(413)
     def _error(err):
-        messages = {400: "Bad request or expired form.", 403: "You do not have access to this page.", 404: "Page not found."}
+        messages = {400: "Bad request or expired form.", 403: "You do not have access to this page.", 404: "Page not found.", 413: "That file is too large (5 MB maximum)."}
         return render_template("error.html", code=err.code, message=messages[err.code]), err.code
 
     return app

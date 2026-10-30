@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Applicants{% endblock %}
+{% block content %}
+<h1>Applicants: {{ listing['role'] }}</h1>
+<p><a href="{{ url_for('listings.manage') }}">&larr; Back to my listings</a></p>
+{% if rows %}
+<table>
+  <thead><tr><th>Student</th><th>CGPA</th><th>Branch</th><th>Best test score</th><th>Resume</th><th>Status</th><th>Update</th></tr></thead>
+  <tbody>
+  {% for r in rows %}
+    <tr>
+      <td>{{ r['name'] }}<br><span class="muted">{{ r['email'] }}</span></td>
+      <td>{{ r['cgpa'] }}</td>
+      <td>{{ r['branch'] }}</td>
+      <td>{{ (r['best_score']|round|int ~ '%') if r['best_score'] is not none else '-' }}</td>
+      <td>{% if r['resume_file'] %}<a href="{{ url_for('profiles.resume', student_id=r['student_id']) }}">Download</a>{% endif %}</td>
+      <td><span class="badge status-{{ r['status']|lower }}">{{ r['status'] }}</span></td>
+      <td>
+        {% if r['status'] in final %}<span class="muted">Final</span>{% else %}
+        <form method="post" action="{{ url_for('applications.update_status', application_id=r['id']) }}" class="inline">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+          <select name="status" aria-label="New status">
+            {% for s in statuses %}<option value="{{ s }}" {{ 'selected' if s == r['status'] }}>{{ s }}</option>{% endfor %}
+          </select>
+          <button type="submit">Save</button>
+        </form>{% endif %}
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}<p class="muted">No applications yet.</p>{% endif %}
+{% endblock %}

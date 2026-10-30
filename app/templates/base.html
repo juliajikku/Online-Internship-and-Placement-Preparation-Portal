@@ -11,6 +11,18 @@
     <a class="brand" href="{{ url_for('pages.index') }}">Internship &amp; Placement Portal</a>
     <nav>
       {% if g.user %}
+        {% if g.user['role'] == 'student' %}
+          <a href="{{ url_for('pages.student_home') }}">Dashboard</a>
+          <a href="{{ url_for('listings.browse') }}">Listings</a>
+          <a href="{{ url_for('applications.mine') }}">Applications</a>
+          <a href="{{ url_for('profiles.student_profile') }}">Profile</a>
+        {% elif g.user['role'] == 'recruiter' %}
+          <a href="{{ url_for('pages.recruiter_home') }}">Dashboard</a>
+          <a href="{{ url_for('listings.manage') }}">My listings</a>
+          <a href="{{ url_for('profiles.recruiter_profile') }}">Company profile</a>
+        {% else %}
+          <a href="{{ url_for('admin.queue') }}">Approvals</a>
+        {% endif %}
         <span class="who">{{ g.user['name'] }} ({{ g.user['role'] }})</span>
         <form method="post" action="{{ url_for('auth.logout') }}" class="inline">
           <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
