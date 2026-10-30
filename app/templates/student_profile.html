@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}My profile{% endblock %}
+{% block content %}
+<h1>My profile</h1>
+<form method="post" enctype="multipart/form-data" class="card">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+  <label for="cgpa">CGPA (0 to 10)</label>
+  <input id="cgpa" name="cgpa" type="number" step="0.01" min="0" max="10" required value="{{ profile.get('cgpa', '') }}">
+  <label for="branch">Branch (for example CSE)</label>
+  <input id="branch" name="branch" required maxlength="40" value="{{ profile.get('branch', '') }}">
+  <label for="skills">Skills</label>
+  <input id="skills" name="skills" maxlength="300" value="{{ profile.get('skills', '') or '' }}">
+  <label for="resume">Resume (PDF or DOCX, max 5 MB)</label>
+  <input id="resume" name="resume" type="file" accept=".pdf,.docx">
+  {% if current and current['resume_file'] %}
+    <p class="muted">Current resume: <a href="{{ url_for('profiles.resume', student_id=g.user['id']) }}">{{ current['resume_name'] }}</a></p>
+  {% else %}
+    <p class="muted">No resume uploaded yet. You need one to apply.</p>
+  {% endif %}
+  <button type="submit">Save profile</button>
+</form>
+{% endblock %}

@@ -25,6 +25,78 @@ CREATE TABLE IF NOT EXISTS audit_log (
     detail     TEXT,
     created_at TEXT NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS student_profiles (
+    user_id     INTEGER PRIMARY KEY REFERENCES users(id),
+    cgpa        REAL    NOT NULL,
+    branch      TEXT    NOT NULL,
+    skills      TEXT,
+    resume_file TEXT,
+    resume_name TEXT,
+    updated_at  TEXT    NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS recruiter_profiles (
+    user_id     INTEGER PRIMARY KEY REFERENCES users(id),
+    description TEXT,
+    website     TEXT,
+    updated_at  TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS listings (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    recruiter_id INTEGER NOT NULL REFERENCES users(id),
+    role        TEXT    NOT NULL,
+    domain      TEXT    NOT NULL,
+    location    TEXT    NOT NULL,
+    min_cgpa    REAL    NOT NULL,
+    branches    TEXT,
+    stipend     INTEGER NOT NULL,
+    deadline    TEXT    NOT NULL,
+    description TEXT,
+    created_at  TEXT    NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS applications (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    listing_id  INTEGER NOT NULL REFERENCES listings(id),
+    student_id  INTEGER NOT NULL REFERENCES users(id),
+    status      TEXT    NOT NULL,
+    applied_at  TEXT    NOT NULL,
+    updated_at  TEXT    NOT NULL,
+    UNIQUE (listing_id, student_id)
+);
+
+CREATE TABLE IF NOT EXISTS tests (
+    id               INTEGER PRIMARY KEY AUTOINCREMENT,
+    title            TEXT    NOT NULL,
+    duration_minutes INTEGER NOT NULL,
+    created_by       INTEGER NOT NULL REFERENCES users(id),
+    created_at       TEXT    NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS questions (
+    id       INTEGER PRIMARY KEY AUTOINCREMENT,
+    test_id  INTEGER NOT NULL REFERENCES tests(id),
+    text     TEXT NOT NULL,
+    option_a TEXT NOT NULL,
+    option_b TEXT NOT NULL,
+    option_c TEXT NOT NULL,
+    option_d TEXT NOT NULL,
+    correct  TEXT NOT NULL CHECK (correct IN ('a', 'b', 'c', 'd'))
+);
+
+CREATE TABLE IF NOT EXISTS attempts (
+    id           INTEGER PRIMARY KEY AUTOINCREMENT,
+    test_id      INTEGER NOT NULL REFERENCES tests(id),
+    student_id   INTEGER NOT NULL REFERENCES users(id),
+    started_at   TEXT    NOT NULL,
+    submitted_at TEXT,
+    score        INTEGER,
+    total        INTEGER,
+    question_order TEXT NOT NULL,
+    answers      TEXT NOT NULL DEFAULT '{}'
+);
 """
 
 
