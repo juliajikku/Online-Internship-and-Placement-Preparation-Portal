@@ -4,6 +4,8 @@
 <h1>Welcome, {{ g.user['name'] }}</h1>
 <div class="card">
   <p>You are logged in as a <strong>Student</strong>.</p>
-  <p class="muted">Internship listings, applications and aptitude tests arrive in Sprint 2.</p>
+  <p><a class="btn" href="{{ url_for('profiles.student_profile') }}">My profile</a>
+     <a class="btn" href="{{ url_for('listings.browse') }}">Browse listings</a>
+     <a class="btn" href="{{ url_for('applications.mine') }}">My applications</a></p>
 </div>
 {% endblock %}

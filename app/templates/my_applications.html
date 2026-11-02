@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}My applications{% endblock %}
+{% block content %}
+<h1>My applications</h1>
+{% if rows %}
+<table>
+  <thead><tr><th>Role</th><th>Company</th><th>Applied</th><th>Status</th><th></th></tr></thead>
+  <tbody>
+  {% for r in rows %}
+    <tr>
+      <td>{{ r['role'] }}</td><td>{{ r['company_name'] }}</td><td>{{ r['applied_at'][:10] }}</td>
+      <td><span class="badge status-{{ r['status']|lower }}">{{ r['status'] }}</span></td>
+      <td>{% if r['status'] == 'Offered' %}
+        <form method="post" action="{{ url_for('applications.accept_offer', application_id=r['id']) }}" class="inline">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+          <button type="submit">Accept offer</button>
+        </form>{% endif %}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}<p class="muted">You have not applied to anything yet. <a href="{{ url_for('listings.browse') }}">Browse listings</a>.</p>{% endif %}
+{% endblock %}

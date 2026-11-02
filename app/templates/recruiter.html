@@ -9,7 +9,11 @@
     <p class="muted">You cannot post listings until the placement cell approves your account.</p>
   {% else %}
     <p class="badge approved">Approved</p>
-    <p class="muted">Posting internship listings arrives in Sprint 2.</p>
+    <div class="stats">
+      <div class="stat"><span class="num">{{ listings }}</span>Listings</div>
+      <div class="stat"><span class="num">{{ applicants }}</span>Applicants</div>
+    </div>
+    <p><a class="btn" href="{{ url_for('listings.manage') }}">Post or manage listings</a></p>
   {% endif %}
 </div>
 {% endblock %}

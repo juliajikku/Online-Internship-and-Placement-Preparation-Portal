@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Internship listings{% endblock %}
+{% block content %}
+<h1>Internship listings</h1>
+<form method="get" class="filters">
+  <input name="q" placeholder="Search role or company" value="{{ filters.q }}" aria-label="Search">
+  <select name="domain" aria-label="Domain">
+    <option value="">All domains</option>
+    {% for d in domains %}<option value="{{ d }}" {{ 'selected' if filters.domain == d }}>{{ d }}</option>{% endfor %}
+  </select>
+  <input name="location" placeholder="Location" value="{{ filters.location }}" aria-label="Location">
+  <input name="min_stipend" type="number" min="0" placeholder="Min stipend" value="{{ filters.min_stipend }}" aria-label="Minimum stipend">
+  <button type="submit">Filter</button>
+  <a class="btn secondary" href="{{ url_for('listings.browse') }}">Clear</a>
+</form>
+{% for r in rows %}{% set l = r.l %}
+<div class="card wide listing">
+  <h2>{{ l['role'] }} <span class="muted">at {{ l['company_name'] }}</span></h2>
+  <p class="muted">{{ l['domain'] }} · {{ l['location'] }} · Stipend {{ l['stipend'] }}/month · Apply by {{ l['deadline'] }}</p>
+  <p>Eligibility: CGPA {{ '%.1f'|format(l['min_cgpa']) }}+ · Branches: {{ l['branches'] or 'All' }}</p>
+  {% if l['description'] %}<p>{{ l['description'] }}</p>{% endif %}
+  {% if r.applied %}
+    <span class="badge approved">Applied</span>
+  {% elif r.unmet %}
+    <button type="button" disabled>Apply</button>
+    <ul class="unmet">{% for reason in r.unmet %}<li>{{ reason }}</li>{% endfor %}</ul>
+  {% else %}
+    <form method="post" action="{{ url_for('applications.apply', listing_id=l['id']) }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <button type="submit">Apply</button>
+    </form>
+  {% endif %}
+</div>
+{% else %}
+<p class="muted">No listings match. Try clearing the filters.</p>
+{% endfor %}
+{% endblock %}
