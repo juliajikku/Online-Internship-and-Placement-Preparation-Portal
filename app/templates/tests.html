@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Aptitude tests{% endblock %}
+{% block content %}
+<h1>Aptitude tests</h1>
+{% if tests %}
+<table>
+  <thead><tr><th>Test</th><th>Questions</th><th>Time</th><th></th></tr></thead>
+  <tbody>{% for t in tests %}
+    <tr><td>{{ t['title'] }}</td><td>{{ t['n'] }}</td><td>{{ t['duration_minutes'] }} min</td>
+      <td>{% if t['n'] %}
+        <form method="post" action="{{ url_for('aptitude.start', test_id=t['id']) }}" class="inline">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+          <button type="submit">Start</button>
+        </form>{% else %}<span class="muted">No questions yet</span>{% endif %}</td></tr>
+  {% endfor %}</tbody>
+</table>
+{% else %}<p class="muted">No tests have been created yet.</p>{% endif %}
+{% endblock %}

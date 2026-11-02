@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Aptitude tests{% endblock %}
+{% block content %}
+<h1>Aptitude tests</h1>
+<form method="post" class="card">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+  <h2>Create a test</h2>
+  <label for="title">Title</label>
+  <input id="title" name="title" required maxlength="100">
+  <label for="duration_minutes">Duration (minutes)</label>
+  <input id="duration_minutes" name="duration_minutes" type="number" min="1" max="180" required value="10">
+  <button type="submit">Create test</button>
+</form>
+<h2>Existing tests</h2>
+{% if tests %}
+<table>
+  <thead><tr><th>Title</th><th>Duration</th><th>Questions</th><th></th></tr></thead>
+  <tbody>{% for t in tests %}
+    <tr><td>{{ t['title'] }}</td><td>{{ t['duration_minutes'] }} min</td><td>{{ t['n'] }}</td>
+        <td><a href="{{ url_for('aptitude.admin_test', test_id=t['id']) }}">Manage questions</a></td></tr>
+  {% endfor %}</tbody>
+</table>
+{% else %}<p class="muted">No tests yet.</p>{% endif %}
+{% endblock %}

@@ -15,6 +15,8 @@
           <a href="{{ url_for('pages.student_home') }}">Dashboard</a>
           <a href="{{ url_for('listings.browse') }}">Listings</a>
           <a href="{{ url_for('applications.mine') }}">Applications</a>
+          <a href="{{ url_for('aptitude.tests') }}">Tests</a>
+          <a href="{{ url_for('aptitude.scores') }}">Scores</a>
           <a href="{{ url_for('profiles.student_profile') }}">Profile</a>
         {% elif g.user['role'] == 'recruiter' %}
           <a href="{{ url_for('pages.recruiter_home') }}">Dashboard</a>
@@ -22,6 +24,7 @@
           <a href="{{ url_for('profiles.recruiter_profile') }}">Company profile</a>
         {% else %}
           <a href="{{ url_for('admin.queue') }}">Approvals</a>
+          <a href="{{ url_for('aptitude.admin_tests') }}">Tests</a>
         {% endif %}
         <span class="who">{{ g.user['name'] }} ({{ g.user['role'] }})</span>
         <form method="post" action="{{ url_for('auth.logout') }}" class="inline">
