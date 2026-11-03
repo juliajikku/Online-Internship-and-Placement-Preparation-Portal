@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}My scores{% endblock %}
+{% block content %}
+<h1>My test scores</h1>
+<div class="card wide">{{ chart }}</div>
+{% if rows %}
+<table>
+  <thead><tr><th>Test</th><th>Score</th><th>Percent</th><th>Date</th><th></th></tr></thead>
+  <tbody>{% for r in rows %}
+    <tr><td>{{ r['title'] }}</td><td>{{ r['score'] }} / {{ r['total'] }}</td>
+        <td>{{ (r['score'] / r['total'] * 100)|round|int }}%</td><td>{{ r['submitted_at'][:10] }}</td>
+        <td><a href="{{ url_for('aptitude.result', attempt_id=r['id']) }}">Review</a></td></tr>
+  {% endfor %}</tbody>
+</table>
+{% else %}<p class="muted">No attempts yet. <a href="{{ url_for('aptitude.tests') }}">Take a test</a>.</p>{% endif %}
+{% endblock %}

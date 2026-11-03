@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}{{ a['title'] }}{% endblock %}
+{% block content %}
+<div class="timerbar">
+  <strong>{{ a['title'] }}</strong>
+  <span>Time left: <span id="timer" data-seconds="{{ seconds_left }}">--:--</span></span>
+  <span id="savestate" class="muted"></span>
+</div>
+<form method="post" id="testform" action="{{ url_for('aptitude.submit', attempt_id=a['id']) }}"
+      data-save-url="{{ url_for('aptitude.save', attempt_id=a['id']) }}">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+  {% for q in questions %}
+  <fieldset class="card wide question">
+    <legend>Question {{ loop.index }} of {{ questions|length }}</legend>
+    <p>{{ q['text'] }}</p>
+    {% for k in ['a', 'b', 'c', 'd'] %}
+      <label class="opt"><input type="radio" name="q_{{ q['id'] }}" value="{{ k }}" {{ 'checked' if saved.get(q['id']|string) == k }}> {{ q['option_' ~ k] }}</label>
+    {% endfor %}
+  </fieldset>
+  {% endfor %}
+  <button type="submit">Submit test</button>
+</form>
+<script src="{{ url_for('static', filename='test.js') }}"></script>
+{% endblock %}

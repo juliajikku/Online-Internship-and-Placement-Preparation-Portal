@@ -6,6 +6,8 @@
   <p>You are logged in as a <strong>Student</strong>.</p>
   <p><a class="btn" href="{{ url_for('profiles.student_profile') }}">My profile</a>
      <a class="btn" href="{{ url_for('listings.browse') }}">Browse listings</a>
-     <a class="btn" href="{{ url_for('applications.mine') }}">My applications</a></p>
+     <a class="btn" href="{{ url_for('applications.mine') }}">My applications</a>
+     <a class="btn" href="{{ url_for('aptitude.tests') }}">Aptitude tests</a>
+     <a class="btn" href="{{ url_for('aptitude.scores') }}">My scores</a></p>
 </div>
 {% endblock %}

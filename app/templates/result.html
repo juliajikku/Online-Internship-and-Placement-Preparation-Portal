@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Result{% endblock %}
+{% block content %}
+<h1>{{ a['title'] }}: result</h1>
+<div class="card"><p class="bigscore">{{ a['score'] }} / {{ a['total'] }}</p>
+  <p class="muted">{{ (a['score'] / a['total'] * 100)|round|int }}% · submitted {{ a['submitted_at'][:16].replace('T', ' ') }} UTC</p></div>
+<h2>Review</h2>
+{% for r in review %}{% set q = r.q %}
+<div class="card wide">
+  <p><strong>{{ loop.index }}. {{ q['text'] }}</strong></p>
+  {% for k in ['a', 'b', 'c', 'd'] %}
+    <p class="rev {{ 'right' if q['correct'] == k else ('wrong' if r.chosen == k else '') }}">{{ k|upper }}. {{ q['option_' ~ k] }}
+      {% if q['correct'] == k %}(correct){% elif r.chosen == k %}(your answer){% endif %}</p>
+  {% endfor %}
+  {% if not r.chosen %}<p class="muted">Not answered.</p>{% endif %}
+</div>
+{% endfor %}
+<p><a class="btn" href="{{ url_for('aptitude.scores') }}">See all my scores</a></p>
+{% endblock %}

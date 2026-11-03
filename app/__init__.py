@@ -5,7 +5,7 @@ from datetime import timedelta
 
 from flask import Flask, abort, render_template, request, session
 
-from . import admin, applications, auth, db, listings, pages, profiles
+from . import admin, applications, aptitude, auth, db, listings, pages, profiles
 from .security import load_current_user
 
 
@@ -36,7 +36,7 @@ def create_app(test_config=None):
 
     app.register_blueprint(auth.bp)
     app.register_blueprint(admin.bp)
-    for module in (profiles, listings, applications, pages):
+    for module in (profiles, listings, applications, aptitude, pages):
         app.register_blueprint(module.bp)
 
     @app.before_request

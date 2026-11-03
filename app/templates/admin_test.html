@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}{{ test['title'] }}{% endblock %}
+{% block content %}
+<h1>{{ test['title'] }} <span class="muted">({{ test['duration_minutes'] }} min)</span></h1>
+<p><a href="{{ url_for('aptitude.admin_tests') }}">&larr; All tests</a></p>
+<form method="post" class="card wide">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+  <h2>Add a question</h2>
+  <label for="text">Question</label>
+  <textarea id="text" name="text" rows="2" maxlength="500" required></textarea>
+  {% for k in ['a', 'b', 'c', 'd'] %}
+    <label for="option_{{ k }}">Option {{ k|upper }}</label>
+    <input id="option_{{ k }}" name="option_{{ k }}" maxlength="200" required>
+  {% endfor %}
+  <label for="correct">Correct option</label>
+  <select id="correct" name="correct" required>
+    {% for k in ['a', 'b', 'c', 'd'] %}<option value="{{ k }}">{{ k|upper }}</option>{% endfor %}
+  </select>
+  <button type="submit">Add question</button>
+</form>
+<h2>Questions ({{ questions|length }})</h2>
+<ol>
+{% for q in questions %}
+  <li>{{ q['text'] }}
+    <ul>
+      {% for k in ['a', 'b', 'c', 'd'] %}<li {{ 'class=correct' if q['correct'] == k }}>{{ k|upper }}. {{ q['option_' ~ k] }}</li>{% endfor %}
+    </ul>
+    <form method="post" action="{{ url_for('aptitude.delete_question', question_id=q['id']) }}" class="inline">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <button type="submit" class="danger">Delete</button>
+    </form>
+  </li>
+{% endfor %}
+</ol>
+{% endblock %}
