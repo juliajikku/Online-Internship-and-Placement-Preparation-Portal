@@ -106,8 +106,12 @@ def utcnow():
 
 def get_db():
     if "db" not in g:
-        g.db = sqlite3.connect(current_app.config["DATABASE"])
+        g.db = sqlite3.connect(current_app.config["DATABASE"], timeout=10)
         g.db.row_factory = sqlite3.Row
+        # NFR4: WAL lets many readers work while one request writes; busy_timeout makes a
+        # writer wait for a short lock instead of failing with "database is locked".
+        g.db.execute("PRAGMA journal_mode=WAL")
+        g.db.execute("PRAGMA busy_timeout=10000")
     return g.db
 
 
