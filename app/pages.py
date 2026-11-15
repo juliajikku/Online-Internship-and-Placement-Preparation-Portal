@@ -1,6 +1,7 @@
 """Landing redirect and the role-specific dashboards."""
 from flask import Blueprint, g, redirect, render_template, url_for
 
+from .analytics import student_dashboard_data
 from .db import get_db
 from .security import login_required, role_required
 
@@ -29,7 +30,7 @@ def dashboard():
 @bp.route("/student")
 @role_required("student")
 def student_home():
-    return render_template("student.html")
+    return render_template("student.html", d=student_dashboard_data(g.user["id"]))
 
 
 @bp.route("/recruiter")

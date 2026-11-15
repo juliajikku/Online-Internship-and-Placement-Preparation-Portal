@@ -5,6 +5,11 @@
 #PES1UG25CS842-Juhi Shah
 
 
+## Sprint 2 - Listings, applications, aptitude tests and charts
+
+Adds student and recruiter profiles, listings with search and filters, apply with eligibility checks, applicant review, offer acceptance, timed aptitude tests, score and placement charts and a CSV report.
+See [docs/SPRINT2.md](docs/SPRINT2.md). Optional demo data: `python seed_demo.py` (after `seed_admin.py`).
+
 ## Sprint 1 - Authentication and recruiter approval
 
 Flask + SQLite web app. Covers the use case **Authenticate User** (issue #1) and **US-07 Approve recruiter accounts** (issue #9).
