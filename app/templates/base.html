@@ -25,6 +25,7 @@
         {% else %}
           <a href="{{ url_for('admin.queue') }}">Approvals</a>
           <a href="{{ url_for('aptitude.admin_tests') }}">Tests</a>
+          <a href="{{ url_for('analytics.admin_analytics') }}">Analytics</a>
         {% endif %}
         <span class="who">{{ g.user['name'] }} ({{ g.user['role'] }})</span>
         <form method="post" action="{{ url_for('auth.logout') }}" class="inline">
