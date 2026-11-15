@@ -2,12 +2,18 @@
 {% block title %}Student dashboard{% endblock %}
 {% block content %}
 <h1>Welcome, {{ g.user['name'] }}</h1>
-<div class="card">
-  <p>You are logged in as a <strong>Student</strong>.</p>
-  <p><a class="btn" href="{{ url_for('profiles.student_profile') }}">My profile</a>
-     <a class="btn" href="{{ url_for('listings.browse') }}">Browse listings</a>
-     <a class="btn" href="{{ url_for('applications.mine') }}">My applications</a>
-     <a class="btn" href="{{ url_for('aptitude.tests') }}">Aptitude tests</a>
-     <a class="btn" href="{{ url_for('aptitude.scores') }}">My scores</a></p>
+{% if d.placed %}<p class="badge approved">Placed</p>{% endif %}
+<div class="stats">
+  <div class="stat"><span class="num">{{ d.total_applications }}</span>Applications</div>
+  <div class="stat"><span class="num">{{ d.counts['Shortlisted'] }}</span>Shortlisted</div>
+  <div class="stat"><span class="num">{{ d.counts['Offered'] + d.counts['Accepted'] }}</span>Offers</div>
+  <div class="stat"><span class="num">{{ d.attempts }}</span>Tests taken</div>
+  <div class="stat"><span class="num">{{ d.avg_score ~ '%' if d.avg_score is not none else '-' }}</span>Average score</div>
 </div>
+<div class="charts">
+  <div class="card wide">{{ d.score_chart }}</div>
+  <div class="card wide">{{ d.status_chart }}</div>
+</div>
+<p><a class="btn" href="{{ url_for('listings.browse') }}">Browse listings</a>
+   <a class="btn" href="{{ url_for('aptitude.tests') }}">Take an aptitude test</a></p>
 {% endblock %}

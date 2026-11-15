@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Placement analytics{% endblock %}
+{% block content %}
+<h1>Placement analytics</h1>
+<div class="stats">
+  <div class="stat"><span class="num">{{ s.students }}</span>Students</div>
+  <div class="stat"><span class="num">{{ s.placed }}</span>Placed</div>
+  <div class="stat"><span class="num">{{ s.placement_pct }}%</span>Placement rate</div>
+  <div class="stat"><span class="num">{{ s.recruiters }}</span>Recruiters</div>
+  <div class="stat"><span class="num">{{ s.listings }}</span>Listings</div>
+  <div class="stat"><span class="num">{{ s.applications }}</span>Applications</div>
+  <div class="stat"><span class="num">{{ s.avg_score ~ '%' if s.avg_score is not none else '-' }}</span>Avg test score</div>
+</div>
+<div class="charts">
+  <div class="card wide">{{ status_chart }}</div>
+  <div class="card wide">{{ top_chart }}</div>
+</div>
+<p><a class="btn" href="{{ url_for('analytics.report_csv') }}">Download placement report (CSV)</a></p>
+{% endblock %}
