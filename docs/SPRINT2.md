@@ -33,7 +33,7 @@
 All charts are drawn on the server as SVG (`app/charts.py`), so they work with the strict Content-Security-Policy and need no JavaScript library: score trend line, application-status donut (student), applications-by-status bars and top-companies bars (Admin).
 
 ## Tests
-`tests/test_part1.py` (profiles, listings, apply, review, offers), `tests/test_part2.py` (aptitude tests, scores) and `tests/test_part3.py` (charts, analytics, CSV). Together with the Sprint 1 tests the suite has 79 tests.
+`tests/test_part1.py` (profiles, listings, apply, review, offers), `tests/test_part2.py` (aptitude tests, scores) and `tests/test_part3.py` (charts, analytics, CSV). `tests/test_nfr.py` (health endpoint, WAL mode, concurrent users) was added after Sprint 2. Together with the Sprint 1 tests the suite has 83 tests; all pass (see docs/reports).
 
 ## Demo data
 `python seed_demo.py` (after `seed_admin.py`) adds an approved demo recruiter, three listings and a 10-question test. Demo recruiter login: `recruiter@demo.com` / `Demo@12345`.
@@ -44,4 +44,9 @@ All charts are drawn on the server as SVG (`app/charts.py`), so they work with t
 3. **Tests are practice tests** open to every student. The "Test" application status is a label the recruiter sets; it does not unlock a specific test.
 4. **Admin creates tests.** Recruiters do not create tests in this version.
 5. **Sprint 1 deviations still apply** (session cookie instead of JWT, HTTPS through `COOKIE_SECURE=1`).
-6. **Not built (backlog):** NFR4 load testing for 100 to 200 users, NFR5 availability windows, NFR7 cross-browser testing.
+6. **Added after Sprint 2 (backlog PRs):** NFR4 concurrency and load test and NFR5 `/health` endpoint (PR #37), NFR7 browser and screen-size check (PR #39). Firefox and Safari have not been tested.
+7. **Admin statistics (FR18):** department-wise statistics are not built. The Admin page shows placements, placement percentage, top companies and a status chart; branch appears only in the CSV report.
+8. **Question bank (FR12, US-09):** questions have no category and cannot be edited, only added and deleted.
+9. **Student charts (FR17):** applications by status are shown as a donut chart, not a funnel chart.
+
+The full list of deviations from the SRS is at the end of SRS_Document.docx.
